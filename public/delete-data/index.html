@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delete your data - Changa Chett</title>
+<meta name="description" content="Ask for your Changa Chett leaderboard record to be deleted.">
+<meta name="theme-color" content="#0E0F12">
+<link rel="canonical" href="https://changachett.peterkarki.com.np/delete-data">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<header class="hud"><div class="wrap"><a class="logo" href="/"><img src="/img/favicon-64.png" width="32" height="32" alt="">Changa Chett</a><nav class="hud-nav"><a href="/">&larr; Home</a></nav></div><div class="flags" aria-hidden="true"></div></header>
+<main class="prose">
+  <span class="tag">YOUR DATA</span>
+  <h1>Delete my data</h1>
+  <p>The game: <strong>Changa Chett: Kite Fight</strong> by Peter Karki (<code>com.pinological.changachett</code>).</p>
+  <p>If you submitted a score, our server holds your gamer name, a random player id, and your scores and run details (wave, kills, kite, map, game version, date). Deleting removes all of it, straight away and for good. Progress saved on your phone is not touched; uninstalling the game removes that.</p>
+
+  <h2>Three ways to delete</h2>
+  <ol>
+    <li><strong>In the game:</strong> Profile &rarr; Delete my online data.</li>
+    <li><strong>Here:</strong> use the form below.</li>
+    <li><strong>By email:</strong> write to <a href="mailto:peter.karki0422@gmail.com?subject=Delete%20my%20Changa%20Chett%20data" data-contact data-contact-text data-subject="Delete my Changa Chett data">peter.karki0422@gmail.com</a> with your player id and gamer name. We reply within 30 days.</li>
+  </ol>
+
+  <form class="form" id="del" novalidate>
+    <label for="pid">Player id <span class="dim">(32 characters, shown in the game under Profile)</span></label>
+    <input id="pid" name="player_id" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text" maxlength="40" required placeholder="e.g. 4f2a9c...">
+    <label for="pname">Gamer name <span class="dim">(as shown on the board)</span></label>
+    <input id="pname" name="name" autocomplete="off" maxlength="14" required placeholder="e.g. Sita">
+    <label class="check"><input type="checkbox" id="sure" required> I understand this deletes my leaderboard record and history for good.</label>
+    <button class="btn" type="submit">Delete my data</button>
+    <p class="state" id="msg" role="status" aria-live="polite"></p>
+  </form>
+  <p class="small">The name is only there so you can check you typed the right id. Deletion uses the player id. Lost your id? Email us your gamer name and tag (like <span class="mono">Sita#4F2A</span>) and we will remove it by hand.</p>
+</main>
+<footer><div class="wrap">
+  <span>Made in Nepal by <a href="https://peterkarki.com.np">Peter Karki</a> &middot; <a href="/">Home</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/leaderboard">Leaderboard</a></span>
+  <span class="mono">&copy; 2026 Changa Chett</span>
+</div></footer>
+<script src="/js/config.js"></script>
+<script src="/js/delete.js"></script>
+</body>
+</html>

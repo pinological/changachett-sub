@@ -1,0 +1,19 @@
+{
+  "name": "changachett-web",
+  "private": true,
+  "type": "module",
+  "description": "Changa Chett: Kite Fight website and leaderboard API (Vercel)",
+  "scripts": {
+    "test": "node --test tests/api.test.mjs",
+    "setup-db": "node --env-file=.env.local scripts/setup-db.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "mongodb": "^6.21.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.4.3"
+  }
+}

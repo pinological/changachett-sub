@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaderboard - Changa Chett</title>
+<meta name="description" content="Top 100 kite fighters in Changa Chett: Kite Fight, the Dashain kite battle game for Android.">
+<meta property="og:title" content="Changa Chett leaderboard">
+<meta property="og:description" content="Top 100 kite fighters over Kathmandu.">
+<meta property="og:image" content="https://changachett.peterkarki.com.np/img/cover.jpg">
+<meta name="theme-color" content="#0E0F12">
+<link rel="canonical" href="https://changachett.peterkarki.com.np/leaderboard">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<header class="hud"><div class="wrap"><a class="logo" href="/"><img src="/img/favicon-64.png" width="32" height="32" alt="">Changa Chett</a><nav class="hud-nav"><a href="/">&larr; Home</a></nav></div><div class="flags" aria-hidden="true"></div></header>
+<main class="prose wide">
+  <span class="tag">TOP 100</span>
+  <h1>Leaderboard</h1>
+  <p class="lead">The best kite fighters over Kathmandu. Scores are sent from the game when a player taps Submit. Names show with a tag, like <span class="mono">Sita#4F2A</span>, so two players can share a name.</p>
+
+  <div class="tabs" role="tablist" aria-label="Board">
+    <button class="tab" role="tab" aria-selected="true" id="tab-all" aria-controls="board">All-time <span class="dim">(this version)</span></button>
+  </div>
+
+  <div id="board" role="tabpanel" aria-labelledby="tab-all">
+    <p class="state" id="state" aria-live="polite">Loading the board&hellip;</p>
+    <div class="table-wrap" hidden id="wrap">
+      <table class="lb">
+        <thead><tr><th scope="col">#</th><th scope="col">Name</th><th scope="col" class="num">Best score</th><th scope="col" class="num">Wave</th><th scope="col" class="hide-sm">Date</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="small">Updated every 30 seconds. Seen a rude name or an impossible score? <a href="mailto:peter.karki0422@gmail.com?subject=Leaderboard%20report" data-contact data-subject="Leaderboard report">Report it</a>. Want your record gone? <a href="/delete-data">Delete my data</a>.</p>
+</main>
+<footer><div class="wrap">
+  <span>Made in Nepal by <a href="https://peterkarki.com.np">Peter Karki</a> &middot; <a href="/">Home</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/delete-data">Delete data</a></span>
+  <span class="mono">&copy; 2026 Changa Chett</span>
+</div></footer>
+<script src="/js/config.js"></script>
+<script src="/js/leaderboard.js"></script>
+</body>
+</html>

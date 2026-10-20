@@ -1,0 +1,11 @@
+{
+  "name": "Changa Chett: Kite Fight",
+  "short_name": "Changa Chett",
+  "icons": [
+    { "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/img/icon_512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#0E0F12",
+  "background_color": "#0E0F12",
+  "display": "browser"
+}
