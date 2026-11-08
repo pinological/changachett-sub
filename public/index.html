@@ -16,7 +16,7 @@
 <link rel="icon" href="/img/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preload" as="image" href="/img/poster.webp">
+<link rel="preload" as="image" href="/img/shot-02-action-day.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Devanagari:wght@600&display=swap" rel="stylesheet">
@@ -28,28 +28,27 @@
   <div class="wrap">
     <a class="logo" href="#top"><img src="/img/favicon-64.png" width="32" height="32" alt="">Changa Chett</a>
     <nav class="hud-nav" aria-label="Sections">
-      <a href="/leaderboard" class="nav-lb">&#9733; Leaderboard</a><a href="#brief">Brief</a><a href="#missions">Missions</a><a href="#kites">Kites</a><a href="#skylines">Skylines</a><a href="#beta">Beta</a><a href="#comms">Comms</a>
+      <a href="/leaderboard" class="nav-lb">&#9733; Leaderboard</a><a href="#brief">Brief</a><a href="#missions">Missions</a><a href="#kites">Kites</a><a href="#skylines">Skylines</a><a href="#comms">Comms</a>
     </nav>
     <button class="lite-btn" id="lite" aria-pressed="false" title="Turn off scanlines and motion">LITE</button>
   </div>
   <div class="flags" aria-hidden="true"></div>
 </header>
-<div class="pager" aria-hidden="true"><b id="pg">01</b> / 07</div>
+<div class="pager" aria-hidden="true"><b id="pg">01</b> / 06</div>
 
 <main id="top">
 <section class="hero" data-ch="01"><div class="wrap hero-grid">
   <div>
-    <div class="kicker"><span class="tag">CH 01 &middot; LIVE</span><span class="tag line">ANDROID &middot; FREE</span><span class="tag warn">BETA OPEN</span></div>
+    <div class="kicker"><span class="tag">CH 01 &middot; LIVE</span><span class="tag line">ANDROID &middot; FREE</span><span class="tag line">v1.0.5</span></div>
     <h1 class="glitch" tabindex="0">Changa<br>Chett</h1>
     <p class="dev" style="font-size:1.4rem;margin:8px 0 0;color:var(--acid)">चङ्गा चेट गर्ने हो न त!</p>
-    <p class="lead">Dashain kite battle over Kathmandu. Swipe to steer, dive across a rival's string and cut it. Every clean cut makes the whole street shout &ldquo;Changa Chett!&rdquo;</p>
-    <a class="btn" href="https://pinological.itch.io/changa-chett">Download APK</a>
-    <a class="btn alt" href="https://forms.gle/2Zg98kkJ8AN7hJGt6">Join the beta</a>
+    <p class="lead">Fly, dive and cut rival kites over Kathmandu in Nepal's Dashain kite battle!</p>
+    <a class="btn" href="https://pinological.itch.io/changa-chett">Download APK (itch.io)</a>
     <a class="btn alt" href="/leaderboard">Leaderboard</a>
-    <span class="btn off">Google Play: soon</span>
+    <span class="btn off" aria-disabled="true">Google Play: coming soon</span>
   </div>
   <div class="crt brackets">
-    <video src="/video/gameplay.mp4" poster="/img/poster.webp" width="960" height="540" autoplay muted loop playsinline preload="metadata" aria-label="Gameplay: cutting a rival kite over Kathmandu"></video>
+    <video src="/video/gameplay.mp4" poster="/img/shot-02-action-day.webp" width="960" height="540" autoplay muted loop playsinline preload="metadata" aria-label="Gameplay: cutting a rival kite over Kathmandu"></video>
     <span class="led">&#9679; REC &middot; KTM-01</span>
   </div>
 </div></section>
@@ -67,7 +66,9 @@
     <div class="card"><span class="n">02</span><h3>RAGE mode</h3><p>Fill the meter and your string turns red-hot. Every cut hits harder.</p></div>
     <div class="card"><span class="n">03</span><h3>Rivals hit back</h3><p>They hunt your line, dive at you and parry. From wave 3, rare premium kites pay big coin bounties.</p></div>
     <div class="card"><span class="n">04</span><h3>Upgrade and unlock</h3><p>Spend coins on string, dive, speed and luck. Unlock Barrel Roll, Loop-the-Loop and Razor Spin.</p></div>
+    <div class="card"><span class="n">05</span><h3>Nepali voice</h3><p>Rival chat and voice lines in English or Nepali (Settings &gt; Rival chat).</p></div>
   </div>
+  <p style="margin-top:26px;color:var(--dim)">Play your way: no account needed. On Android you can optionally fill in your gamer name from your Google account. Only the display name is read.</p>
 </div></section>
 
 <section id="kites" data-ch="03"><div class="wrap">
@@ -85,12 +86,14 @@
   <div class="sec-head"><span class="sec-num">04</span><h2 class="glitch" tabindex="0">Five skylines</h2></div>
   <p class="lead" style="margin-bottom:34px">Kathmandu Valley, Boudhanath, Dharahara, Basantapur Durbar Square and Swayambhu, from bright mornings to glowing dusk, with wind, rain and storms.</p>
   <div class="shots">
-    <figure><div class="crt"><img loading="lazy" width="960" height="540" src="/img/05_maps.webp" alt="The five Nepal maps"></div><figcaption>CH 04 / maps</figcaption></figure>
-    <figure><div class="crt"><img loading="lazy" width="960" height="540" src="/img/02_action_day.webp" alt="Cutting a rival kite on a sunny day"></div><figcaption>CH 05 / day fight</figcaption></figure>
-    <figure><div class="crt"><img loading="lazy" width="960" height="540" src="/img/03_action_rage.webp" alt="RAGE mode with a red-hot string"></div><figcaption>CH 06 / rage mode</figcaption></figure>
-    <figure><div class="crt"><img loading="lazy" width="960" height="540" src="/img/04_kites_lineup.webp" alt="Lineup of Nepali kites"></div><figcaption>CH 07 / kite lineup</figcaption></figure>
-    <figure><div class="crt"><img loading="lazy" width="960" height="540" src="/img/06_shop_tab1.webp" alt="The kite shop"></div><figcaption>CH 08 / shop</figcaption></figure>
-    <figure><div class="crt"><img loading="lazy" width="960" height="540" src="/img/07_shop_tab2.webp" alt="Upgrades in the shop"></div><figcaption>CH 09 / upgrades</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-01-hero.webp" alt="Title screen of Changa Chett: Kite Fight with Nepali kites over Kathmandu"></div><figcaption>CH 01 / Nepal's Dashain kite battle</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-02-action-day.webp" alt="Diving across a rival kite's string on a sunny day"></div><figcaption>CH 02 / Dive, slash, cut</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-03-rage.webp" alt="RAGE mode with a red-hot string"></div><figcaption>CH 03 / Fill RAGE, burn the sky</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-04-kites.webp" alt="Lineup of Nepali kites to collect"></div><figcaption>CH 04 / Collect 12 Nepali kites</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-05-maps.webp" alt="The five Nepal maps"></div><figcaption>CH 05 / Five skylines of Nepal</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-06-tricks.webp" alt="Shop tab for unlocking tricks"></div><figcaption>CH 06 / Unlock tricks</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-07-upgrades.webp" alt="Shop tab for string, dive and luck upgrades"></div><figcaption>CH 07 / Upgrade your string, dive and luck</figcaption></figure>
+    <figure><div class="crt"><img loading="lazy" width="1280" height="720" src="/img/shot-08-nepali-voice.webp" alt="Rival taunting the player in Nepali during a fight"></div><figcaption>CH 08 / Rivals taunt you in Nepali voice</figcaption></figure>
   </div>
 </div></section>
 
@@ -106,20 +109,8 @@
   <a class="btn" href="/leaderboard" style="margin-top:22px">See the full top 100</a>
 </div></section>
 
-<section class="beta" id="beta" data-ch="06"><div class="wrap">
-  <div class="sec-head"><span class="sec-num" style="color:var(--bg)">06</span><h2 class="glitch" tabindex="0">Beta signal</h2><span class="tag">12 testers needed</span></div>
-  <p class="lead">Google Play needs 12 testers who keep the game installed for 14 days in a row before we can launch. Be one of them.</p>
-  <ul>
-    <li>Android phone and a Gmail you use on the Play Store</li>
-    <li>Install the test link we send, keep it 14 days, play now and then, tell us what breaks</li>
-    <li>13 or older</li>
-    <li>Reward: early access, a say in what gets fixed first, credits, and a chance to be a <b>rival kite in the game</b> with your own family-friendly gamer name and taunt</li>
-  </ul>
-  <a class="btn" href="https://forms.gle/2Zg98kkJ8AN7hJGt6">Sign up as a tester</a>
-</div></section>
-
-<section id="comms" data-ch="07"><div class="wrap">
-  <div class="sec-head"><span class="sec-num">07</span><h2 class="glitch" tabindex="0">Comms <span class="dev" style="font-size:.5em;color:var(--acid)">सम्पर्क</span></h2></div>
+<section id="comms" data-ch="06"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2 class="glitch" tabindex="0">Comms <span class="dev" style="font-size:.5em;color:var(--acid)">सम्पर्क</span></h2></div>
   <details><summary>How do I install the APK?</summary><p>Download it from itch.io on your phone and open it. If Android asks, allow &ldquo;Install unknown apps&rdquo; for your browser or file manager, then tap Install.</p></details>
   <details><summary>Is it free? Ads?</summary><p>Free and offline. Ads show on the menu and game-over screens only, never during play.</p></details>
   <details><summary>Reinstall when it reaches Google Play?</summary><p>Yes. The itch.io and Play versions are signed differently, so uninstall the itch.io one first.</p></details>

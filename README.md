@@ -8,7 +8,7 @@ Static site in `public/` (no build step) plus a tiny leaderboard API in `api/` (
 |---|---|
 | `/` | Landing page (`public/index.html`, script in `public/js/home.js`) |
 | `/leaderboard` | Top 100, all-time for the current board version |
-| `/privacy` | Privacy policy, version 3 (leaderboard, Unity Ads, MongoDB Atlas). `PRIVACY.md` is a short copy |
+| `/privacy` | Privacy policy, version 4 (leaderboard, Google name button, AdMob, MongoDB Atlas). `PRIVACY.md` is a short copy |
 | `/delete-data` | Players delete their leaderboard record (form or email). Needed for Google Play |
 | `/robots.txt`, `/sitemap.xml`, `/404` | SEO and not-found page |
 | `api/submit`, `api/top`, `api/me`, `api/delete`, `api/admin/remove` | Leaderboard API, see below |
