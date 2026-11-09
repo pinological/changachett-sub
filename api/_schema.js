@@ -7,10 +7,12 @@
 // Bump when a new game version should start a fresh board ("all-time, this version only").
 export const BOARD_VERSION = 'v1';
 
-export const COLLECTIONS = { players: 'players', rate: 'rate' };
+export const COLLECTIONS = { players: 'players', rate: 'rate', accounts: 'accounts' };
 
 export const LIMITS = {
   bodyBytes: 1024,
+  linkBodyBytes: 4096, // a Google ID token is about 1 KB
+  linksPerIpPerHour: 20,
   maxScorePerWave: Number(process.env.MAX_SCORE_PER_WAVE) || 5000, // configurable per deploy
   maxScoreAbsolute: 10_000_000,
   maxWave: 999,
@@ -38,6 +40,7 @@ export const PATTERNS = {
   text: /^[A-Za-z0-9_ -]{0,24}$/, // kite ("kite0"...), map ("valley", "boudha"...)
   version: /^[0-9A-Za-z.+-]{0,16}$/, // "1.0.0"
   tag: /^[0-9a-fA-F]{4}$/,
+  accountHash: /^[0-9a-f]{64}$/,
 };
 
 // Request body of POST /api/submit. Every field except player_id/name is also a history entry.
@@ -99,6 +102,19 @@ export const VALIDATORS = {
       },
     },
   },
+  accounts: {
+    // One Google account <-> one player id. `_id` is a SHA-256 of the Google account id (never the id or the e-mail itself).
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['_id', 'player_id', 'linkedAt'],
+      additionalProperties: false,
+      properties: {
+        _id: { bsonType: 'string', pattern: PATTERNS.accountHash.source },
+        player_id: { bsonType: 'string', pattern: PATTERNS.playerId.source },
+        linkedAt: { bsonType: 'date' },
+      },
+    },
+  },
 };
 
 export const INDEXES = {
@@ -107,6 +123,7 @@ export const INDEXES = {
     { key: { updatedAt: 1 }, options: { name: 'updatedAt' } },
   ],
   rate: [{ key: { expireAt: 1 }, options: { name: 'expireAt_ttl', expireAfterSeconds: 0 } }],
+  accounts: [{ key: { player_id: 1 }, options: { name: 'player_id_unique', unique: true } }],
 };
 
 /** One history entry from a validated run. */
@@ -132,10 +149,11 @@ export const OUTPUT = {
   topRow: ['rank', 'name', 'tag', 'score', 'wave', 'ts'],
   submit: ['ok', 'rank', 'best'],
   me: ['ok', 'rank', 'best'],
+  link: ['ok', 'player_id', 'name', 'restored'],
   errorCodes: ['bad_player_id', 'name_missing', 'name_length', 'name_chars', 'name_needs_letter', 'name_looks_like_phone',
     'name_looks_like_email', 'name_not_allowed', 'bad_wave', 'bad_kills', 'bad_score', 'score_implausible', 'bad_ts',
     'bad_kite', 'bad_map', 'bad_version', 'rate_limited', 'server_error', 'bad_json', 'body_too_large', 'method_not_allowed',
-    'unauthorized', 'need_player_id_or_tag', 'ambiguous_tag'],
+    'unauthorized', 'need_player_id_or_tag', 'ambiguous_tag', 'bad_token', 'already_linked'],
 };
 
 /** Public top-list row from a player document. */

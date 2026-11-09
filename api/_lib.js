@@ -12,6 +12,7 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { MongoClient } from 'mongodb';
 import { BEST_RUN_FIELDS, BOARD_VERSION, COLLECTIONS, INDEXES, LIMITS, PATTERNS, VALIDATORS, newRunDoc } from './_schema.js';
 import { SUBSTRING, TOKEN } from './_blocklist.js';
+import { GOOGLE_WEB_CLIENT_ID } from './_config.js';
 
 export const BOARD = BOARD_VERSION;
 const ON_BOARD = { board: BOARD, best: { $gte: 0 } }; // best -1 = registered but not on the board
@@ -24,7 +25,7 @@ export function mongo() {
     const client = await new MongoClient(process.env.MONGODB_URI, { maxPoolSize: 5, serverSelectionTimeoutMS: 5000 }).connect();
     const db = client.db(process.env.MONGODB_DB || 'changachett');
     await ensureDb(db);
-    return { client, db, players: db.collection(COLLECTIONS.players), rate: db.collection(COLLECTIONS.rate) };
+    return { client, db, players: db.collection(COLLECTIONS.players), rate: db.collection(COLLECTIONS.rate), accounts: db.collection(COLLECTIONS.accounts) };
   })().catch((e) => { globalThis.__ccMongo = null; throw e; });
   return globalThis.__ccMongo;
 }
@@ -76,13 +77,13 @@ export function begin(req, res, method) {
 }
 
 /** Parses a small JSON body. Returns null (and answers) when it is too big or not JSON. */
-export function readBody(req, res) {
+export function readBody(req, res, maxBytes = LIMITS.bodyBytes) {
   const len = Number(req.headers['content-length'] || 0);
-  if (len > LIMITS.bodyBytes) { fail(res, 413, 'body_too_large'); return null; }
+  if (len > maxBytes) { fail(res, 413, 'body_too_large'); return null; }
   let body = req.body;
   try { if (typeof body === 'string') body = JSON.parse(body); } catch { body = null; }
   if (!body || typeof body !== 'object' || Array.isArray(body)) { fail(res, 400, 'bad_json'); return null; }
-  if (JSON.stringify(body).length > LIMITS.bodyBytes) { fail(res, 413, 'body_too_large'); return null; }
+  if (JSON.stringify(body).length > maxBytes) { fail(res, 413, 'body_too_large'); return null; }
   return body;
 }
 
@@ -205,11 +206,56 @@ export async function rankOf({ players }, best) {
 }
 
 /** Removes everything stored for one player (board entry, profile and history live in one document). */
-export async function removePlayer({ players }, id) {
+export async function removePlayer({ players, accounts }, id) {
   await players.deleteOne({ _id: id });
+  await accounts.deleteMany({ player_id: id }); // the Google link goes with the rest
 }
 
 /** Player ids starting with a 4-character tag (max 20). */
 export function findByTag({ players }, tag) {
   return players.find({ _id: { $regex: '^' + tag.toLowerCase() } }, { projection: { name: 1 } }).limit(20).toArray();
+}
+
+// ---------- Google account link ----------
+// A guest can link a Google account so the scores follow the player to a new phone. The game sends the Google ID token;
+// the server checks it with Google, keeps only a SHA-256 of the Google account id (never the id, e-mail or name) and
+// the player id it belongs to.
+export const google = {
+  /** Returns the Google account id ("sub") of a valid ID token made for this game, or null. Tests replace this. */
+  async verify(idToken) {
+    if (typeof idToken !== 'string' || idToken.length < 100 || idToken.length > 3000 || !/^[\w-]+\.[\w-]+\.[\w-]+$/.test(idToken)) return null;
+    try {
+      const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(idToken), { signal: AbortSignal.timeout(6000) });
+      if (!r.ok) return null;
+      const t = await r.json();
+      const issuerOk = t.iss === 'accounts.google.com' || t.iss === 'https://accounts.google.com';
+      if (t.aud !== GOOGLE_WEB_CLIENT_ID || !issuerOk || !t.sub || Number(t.exp) * 1000 < Date.now()) return null;
+      return String(t.sub);
+    } catch { return null; }
+  },
+};
+
+export const accountHash = (sub) => createHash('sha256').update('cc-acct:' + sub).digest('hex');
+
+/**
+ * Links a Google account to a player id.
+ *  - account unknown          -> linked to this player id (a guest upgrading keeps their scores)
+ *  - account already linked   -> returns that player id (a new phone gets the old scores back); `restored` is true when it differs
+ *  - this player id belongs to another Google account -> { error: 'already_linked' }
+ */
+export async function linkAccount({ accounts, players }, hash, playerId) {
+  let doc = await accounts.findOne({ _id: hash });
+  if (!doc) {
+    if (await accounts.findOne({ player_id: playerId })) return { error: 'already_linked' };
+    try {
+      await accounts.insertOne({ _id: hash, player_id: playerId, linkedAt: new Date() });
+      doc = { player_id: playerId };
+    } catch (e) {
+      if (e?.code !== 11000) throw e; // a racing second link of the same account: read the winner
+      doc = await accounts.findOne({ _id: hash });
+      if (!doc) return { error: 'already_linked' };
+    }
+  }
+  const p = await players.findOne({ _id: doc.player_id }, { projection: { name: 1 } });
+  return { player_id: doc.player_id, name: p ? String(p.name) : null, restored: doc.player_id !== playerId };
 }

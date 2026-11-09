@@ -13,7 +13,8 @@ process.env.MAX_SCORE_PER_WAVE = '5000';
 assert.match(process.env.MONGODB_URI, /^mongodb:\/\/127\.0\.0\.1:/);
 
 const { BOARD_VERSION, INDEXES, LIMITS, OUTPUT, VALIDATORS, newPlayerDoc } = await import('../api/_schema.js');
-const { mongo, saveRun } = await import('../api/_lib.js');
+const { mongo, saveRun, google } = await import('../api/_lib.js');
+const link = (await import('../api/link.js')).default;
 const submit = (await import('../api/submit.js')).default;
 const top = (await import('../api/top.js')).default;
 const me = (await import('../api/me.js')).default;
@@ -23,7 +24,7 @@ const adminRemove = (await import('../api/admin/remove.js')).default;
 let store;
 before(async () => { store = await mongo(); });
 after(async () => { await store.client.close(); await server.stop(); });
-const reset = async () => { await store.players.deleteMany({}); await store.rate.deleteMany({}); };
+const reset = async () => { await store.players.deleteMany({}); await store.rate.deleteMany({}); await store.accounts.deleteMany({}); };
 
 async function call(handler, { method = 'GET', url = '/', body, headers = {}, ip = '1.2.3.4' } = {}) {
   const raw = body === undefined ? undefined : JSON.stringify(body);
@@ -226,4 +227,56 @@ test('OPTIONS preflight and wrong method', async () => {
   assert.equal((await call(submit, { method: 'OPTIONS' })).status, 204);
   assert.equal((await call(submit, { method: 'GET' })).status, 405);
   assert.equal((await call(top, { method: 'POST' })).status, 405);
+});
+
+// ---------- Google account link (the Google check itself is replaced: no network in tests) ----------
+const fakeToken = 'a'.repeat(120) + '.b.c';
+const asGoogleAccount = (sub) => { google.verify = async (t) => (t === fakeToken ? sub : null); };
+
+test('link: a guest links a Google account and keeps the player id', async () => {
+  await reset();
+  asGoogleAccount('g-111');
+  const r = await post(link, { player_id: hex('a1'), id_token: fakeToken });
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.json, { ok: true, player_id: hex('a1'), name: null, restored: false });
+  const acc = await store.accounts.findOne({ player_id: hex('a1') });
+  assert.match(acc._id, /^[0-9a-f]{64}$/);
+  assert.ok(!JSON.stringify(acc).includes('g-111'), 'the Google id must not be stored');
+  assert.equal(await store.accounts.countDocuments({ $nor: [VALIDATORS.accounts] }), 0);
+});
+
+test('link: a new phone signing in with the same Google account gets the old player id and name', async () => {
+  await reset();
+  asGoogleAccount('g-222');
+  await post(submit, run({ player_id: hex('a1'), name: 'Sita' }));
+  await post(link, { player_id: hex('a1'), id_token: fakeToken });
+  const r = await post(link, { player_id: hex('b2'), id_token: fakeToken }, { ip: '9.9.9.9' });
+  assert.deepEqual(r.json, { ok: true, player_id: hex('a1'), name: 'Sita', restored: true });
+});
+
+test('link: one player id cannot take a second Google account', async () => {
+  await reset();
+  asGoogleAccount('g-333');
+  await post(link, { player_id: hex('a1'), id_token: fakeToken });
+  asGoogleAccount('g-444');
+  const r = await post(link, { player_id: hex('a1'), id_token: fakeToken });
+  assert.equal(r.status, 409);
+  assert.equal(r.json.error, 'already_linked');
+});
+
+test('link: bad token, bad player id and big bodies are refused', async () => {
+  await reset();
+  asGoogleAccount('g-555');
+  assert.equal((await post(link, { player_id: hex('a1'), id_token: 'nope' })).json.error, 'bad_token');
+  assert.equal((await post(link, { player_id: 'bad', id_token: fakeToken })).json.error, 'bad_player_id');
+  assert.equal((await post(link, { player_id: hex('a1'), id_token: 'x'.repeat(5000) })).status, 413);
+});
+
+test('delete also removes the Google link', async () => {
+  await reset();
+  asGoogleAccount('g-666');
+  await post(submit, run());
+  await post(link, { player_id: hex('a1'), id_token: fakeToken });
+  await post(del, { player_id: hex('a1') });
+  assert.equal(await store.accounts.countDocuments(), 0);
 });
