@@ -85,6 +85,14 @@ section { padding:72px 0; border-top:2px solid var(--line); position:relative; }
 /* hero over the Boudha dusk painting */
 .hero { padding:56px 0 84px; border-top:0; overflow:hidden;
   background:linear-gradient(90deg,rgba(27,23,68,.82) 0%,rgba(27,23,68,.4) 38%,rgba(27,23,68,0) 65%),linear-gradient(0deg,rgba(27,23,68,.9) 0,transparent 22%),url(/img/cup/site-bg.webp) center bottom/cover no-repeat; }
+/* soft dark fade behind the hero text so it never fights the painting */
+.hero-copy { position:relative; }
+.hero-copy::before { content:""; position:absolute; z-index:-1; inset:-40px -60px -30px -60px; pointer-events:none;
+  background:radial-gradient(ellipse at 40% 50%,rgba(20,16,52,.82) 0%,rgba(20,16,52,.6) 45%,rgba(20,16,52,0) 75%); }
+.hero h1 { text-shadow:5px 5px 0 var(--warn),0 0 24px rgba(10,8,30,.6); }
+@media (max-width:860px) {
+  .hero-copy::before { inset:-30px -18px -20px; background:linear-gradient(180deg,rgba(20,16,52,0) 0%,rgba(20,16,52,.7) 14%,rgba(20,16,52,.78) 60%,rgba(20,16,52,.55) 88%,rgba(20,16,52,0) 100%); }
+}
 .hero .lead, .hero .ne { text-shadow:0 2px 8px rgba(10,8,30,.95),0 0 2px rgba(10,8,30,.9); color:var(--text); }
 .hero-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:42px; align-items:end; position:relative; z-index:1; }
 @media (min-width:861px) {
