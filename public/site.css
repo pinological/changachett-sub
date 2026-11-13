@@ -9,8 +9,11 @@
 }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:70px; }
-body { margin:0; color:var(--text); font-family:var(--body); font-size:17px; line-height:1.6; overflow-x:hidden;
-  background:radial-gradient(1100px 700px at 85% -5%,#3A2A80 0,transparent 60%),radial-gradient(900px 600px at -10% 40%,#2B1E66 0,transparent 60%),var(--bg); background-attachment:fixed; }
+body { margin:0; color:var(--text); font-family:var(--body); font-size:17px; line-height:1.6; overflow-x:hidden; background:var(--bg); }
+/* site-wide backdrop: the kite duel painting, dimmed so text stays readable */
+body::before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:linear-gradient(rgba(27,23,68,.86),rgba(27,23,68,.86)),url(/img/cup/site-bg.webp) 70% center/cover no-repeat; }
+@media (max-width:860px) { body::before { background:linear-gradient(rgba(27,23,68,.88),rgba(27,23,68,.88)),url(/img/cup/site-bg-tall.webp) center/cover no-repeat; } }
 img, video { max-width:100%; display:block; }
 a { color:var(--acid); }
 :focus-visible { outline:3px solid var(--acid); outline-offset:3px; }
@@ -81,13 +84,19 @@ section { padding:72px 0; border-top:2px solid var(--line); position:relative; }
 
 /* hero over the Boudha dusk painting */
 .hero { padding:56px 0 84px; border-top:0; overflow:hidden;
-  background:linear-gradient(90deg,rgba(27,23,68,.96) 0%,rgba(27,23,68,.82) 42%,rgba(27,23,68,.2) 100%),linear-gradient(0deg,var(--bg) 0,transparent 28%),url(/img/cup/bg-dusk.webp) center 30%/cover no-repeat; }
-.hero-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:42px; align-items:center; position:relative; z-index:1; }
+  background:linear-gradient(90deg,rgba(27,23,68,.82) 0%,rgba(27,23,68,.4) 38%,rgba(27,23,68,0) 65%),linear-gradient(0deg,rgba(27,23,68,.9) 0,transparent 22%),url(/img/cup/site-bg.webp) center bottom/cover no-repeat; }
+.hero .lead, .hero .ne { text-shadow:0 2px 8px rgba(10,8,30,.95),0 0 2px rgba(10,8,30,.9); color:var(--text); }
+.hero-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:42px; align-items:end; position:relative; z-index:1; }
+@media (min-width:861px) {
+  .hero { min-height:calc(100vh - 64px); display:flex; align-items:flex-end; }
+  .hero > .wrap { width:100%; }
+  .hero .crt { width:min(440px,100%); justify-self:end; margin-top:38vh; }
+}
 .hero p.lead { font-size:1.15rem; margin:18px 0 22px; }
 .hero .ne { font-size:1.4rem; margin:14px 0 0; color:var(--teal); font-weight:600; }
 @media (max-width:860px) {
   .hero-grid { grid-template-columns:1fr; }
-  .hero { padding-top:36px; background:linear-gradient(180deg,rgba(27,23,68,.55) 0%,rgba(27,23,68,.88) 38%,var(--bg) 100%),url(/img/cup/bg-dusk-tall.webp) center top/cover no-repeat; }
+  .hero { padding-top:36px; background:linear-gradient(180deg,rgba(27,23,68,.35) 0,rgba(27,23,68,.15) 140px,rgba(27,23,68,.2) 420px,var(--bg) 640px),url(/img/cup/site-bg-tall.webp) center -170px/max(100%,420px) auto no-repeat,var(--bg); }
 }
 
 .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
@@ -123,7 +132,7 @@ footer .wrap { display:flex; flex-wrap:wrap; gap:10px 24px; justify-content:spac
 /* ---------- Release Cup ---------- */
 .cup { overflow:hidden; padding:90px 0 96px; border-top:0; isolation:isolate; }
 .cup-bg { position:absolute; inset:0; z-index:-2;
-  background:linear-gradient(90deg,var(--bg) 0%,rgba(27,23,68,.94) 38%,rgba(27,23,68,.45) 70%,rgba(27,23,68,.2) 100%),linear-gradient(0deg,var(--bg) 0,transparent 22%),linear-gradient(180deg,var(--bg) 0,transparent 18%),url(/img/cup/duel.webp) right center/cover no-repeat; }
+  background:linear-gradient(90deg,var(--bg) 0%,rgba(27,23,68,.94) 38%,rgba(27,23,68,.45) 70%,rgba(27,23,68,.2) 100%),linear-gradient(0deg,var(--bg) 0,transparent 22%),linear-gradient(180deg,var(--bg) 0,transparent 18%),url(/img/cup/bg-dusk.webp) right center/cover no-repeat; }
 .cup-flags { position:absolute; top:-18px; right:-40px; width:min(560px,70%); height:auto; z-index:-1; opacity:.75; pointer-events:none; }
 .cup-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center; }
 .cup-kicker { font-family:var(--display); font-weight:900; color:var(--teal); letter-spacing:.32em; text-transform:uppercase; font-size:.85rem; margin:0 0 8px; }
@@ -148,7 +157,7 @@ footer .wrap { display:flex; flex-wrap:wrap; gap:10px 24px; justify-content:spac
 @media (max-width:860px) {
   .cup { padding:70px 0 80px; }
   .cup-grid { grid-template-columns:1fr; }
-  .cup-bg { background:linear-gradient(180deg,rgba(27,23,68,.35) 0%,rgba(27,23,68,.85) 30%,var(--bg) 55%),url(/img/cup/duel-tall.webp) center top/100% auto no-repeat,var(--bg); }
+  .cup-bg { background:linear-gradient(180deg,rgba(27,23,68,.35) 0%,rgba(27,23,68,.85) 30%,var(--bg) 55%),url(/img/cup/bg-dusk-tall.webp) center top/100% auto no-repeat,var(--bg); }
   .cup-steps { grid-template-columns:1fr; }
 }
 
