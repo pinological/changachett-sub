@@ -1,7 +1,7 @@
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var lite = document.getElementById('lite');
-  function setLite(on) { document.body.classList.toggle('lite', on); lite.setAttribute('aria-pressed', on ? 'true' : 'false'); document.querySelectorAll('video').forEach(function (v) { if (on) v.pause(); else v.play().catch(function () {}); }); }
+  function setLite(on) { document.body.classList.toggle('lite', on); lite.setAttribute('aria-pressed', on ? 'true' : 'false'); document.querySelectorAll('.hero video').forEach(function (v) { if (on) v.pause(); else v.play().catch(function () {}); }); }
   var slow = navigator.connection && (navigator.connection.saveData || /(^|-)(2g|3g)$/.test(navigator.connection.effectiveType || ''));
   if (reduce || slow || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2)) setLite(true);
   lite.addEventListener('click', function () { setLite(!document.body.classList.contains('lite')); });
@@ -43,6 +43,32 @@
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) pg.textContent = e.target.getAttribute('data-ch'); }); }, { rootMargin: '-45% 0px -50% 0px' });
     document.querySelectorAll('[data-ch]').forEach(function (s) { io.observe(s); });
+  }
+
+  // Release Cup: hide after the event, flash + play the trailer when the section comes into view
+  var cup = document.getElementById('release-cup');
+  if (cup) {
+    var end = new Date(cup.getAttribute('data-cup-end') + 'T00:00:00+05:45');
+    if (Date.now() >= end.getTime()) {
+      document.querySelectorAll('[data-cup]').forEach(function (el) { el.hidden = true; el.style.display = 'none'; });
+    } else {
+      var vid = cup.querySelector('video'), snd = cup.querySelector('.snd');
+      snd.addEventListener('click', function () {
+        vid.muted = !vid.muted; snd.setAttribute('aria-pressed', vid.muted ? 'false' : 'true');
+        snd.innerHTML = vid.muted ? '&#128264; Sound on' : '&#128263; Mute';
+        if (!vid.muted) { vid.currentTime = 0; vid.play().catch(function () {}); }
+      });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) {
+              if (!cup.classList.contains('hit')) cup.classList.add('hit');
+              if (!document.body.classList.contains('lite') || !vid.muted) vid.play().catch(function () {});
+            } else vid.pause();
+          });
+        }, { threshold: 0.35 }).observe(cup);
+      }
+    }
   }
 
   // boot screen: short, skippable, skipped for reduced motion

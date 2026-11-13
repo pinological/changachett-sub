@@ -11,7 +11,11 @@
     if (!list.length) { state.textContent = 'No scores yet. Be the first: play a round and tap Submit in the game.'; wrap.hidden = true; return; }
     list.forEach(function (p) {
       var tr = document.createElement('tr');
-      if (p.rank <= 3) tr.className = 'top' + p.rank;
+      var cls = [];
+      if (p.rank <= 3) cls.push('top' + p.rank);
+      if (p.rank <= 20) cls.push('boss');   // Release Cup: the top 20 become final bosses
+      if (p.rank === 20) cls.push('cutline');
+      tr.className = cls.join(' ');
       cell(tr, String(p.rank), 'rank');
       var name = cell(tr, p.name, 'name');
       var tag = document.createElement('span'); tag.className = 'ptag'; tag.textContent = '#' + p.tag; name.appendChild(tag);
